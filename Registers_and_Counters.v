@@ -1,4 +1,4 @@
-// four-bit universal shift register
+// Four-bit universal shift register
 module uni_shift_reg (
   input s0, s1,
         MSB_in, LSB_in,
@@ -20,4 +20,20 @@ module uni_shift_reg (
 );
   
 endmodule 
-//-------------------------
+//-----------------------------------------
+// Four-bit binary counter
+module binary_counter(
+  input CLK, Clr, Load, Count;
+  input [3:0] C_in;
+  output C_cout;    // Carry output
+  output [3:0] count_out);
+  
+  assign C_out = Count && !Clr && Count && (C_out==4'b1111);
+  
+  always @(posedge CLK, negedge Clr)
+    begin
+      if(!Clr) count_out <= 4'b0000;
+      else if (Load) count_out <= C_in;
+      else if (Count) count_out <= C_in + 1'b1;
+    end   
+endmodule 
