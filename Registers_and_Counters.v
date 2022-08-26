@@ -37,3 +37,23 @@ module binary_counter(
       else if (Count) count_out <= C_in + 1'b1;
     end   
 endmodule 
+
+//----------------------------------
+// Memory Reads & Write
+// Memr of size 64, 8 bit length 
+// Address is 6 bits long (64 = 2^6)
+module memory(
+  input CLK, En, ReadWrite;
+  input [7:0] Data_in;
+  inout [5:0] Addr;
+  output [7:0] Data_out
+);
+  reg [7:0]  Memr [63:0]  // [length] Mem [depth]
+  always @(posedge CLK, ReadWrite, En)
+    begin
+      if (!En) Data_out = 8'bz;   // High impedance state
+       else
+         if (ReadWrite) Data_out = Memr[Addr]; // Read operation 
+            else  Memr[Addr] = Data_in // Write operation 
+    end 
+endmodule 
